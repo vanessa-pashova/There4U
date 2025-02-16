@@ -34,19 +34,23 @@ public abstract class User {
         this.anonymous = anonymous;
 
         if(anonymous)
-            this.setUsername("Anonymous");
+            this.setUsername("Anonymous", userRepository);
     }
 
     //Default Constructor
     public User() {}
 
-    //Getters for ID and username
+    //Getters for ID, username and anonymous
     public long getId() {
         return this.id;
     }
 
     public String getUsername() {
         return this.username;
+    }
+
+    public boolean isAnonymous() {
+        return this.anonymous;
     }
 
     //Generator for ID between 100,000 and 999,999
@@ -85,12 +89,19 @@ public abstract class User {
         return true;
     }
 
-    public void setUsername(String username) {
-        //We check if the username is valid
-        if(this.validUsername(username))
-            this.username = username;
+    public void setUsername(String username, UserRepository userRepository) {
+        //We check if the user is anonymous
+        if(this.anonymous)
+            throw new IllegalArgumentException(">! Anonymous users cannot be set to anonymous user");
 
-        //If it's not valid, we throw an error
-        else throw new IllegalArgumentException(">! Invalid username.");
+        //We check if the username is not valid
+        if(!this.validUsername(username))
+            throw new IllegalArgumentException(">! Invalid username.");
+
+        //We check if this username is already taken
+        if(userRepository.existsByUsername(username))
+            throw new IllegalArgumentException(">! Username is already taken.");
+
+        this.username = username;
     }
 }
