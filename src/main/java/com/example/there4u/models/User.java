@@ -34,7 +34,7 @@ public abstract class User {
         this.anonymous = anonymous;
 
         if(anonymous)
-            this.setUsername("Anonymous", userRepository);
+            this.username = "AnonymousUser";
     }
 
     //Default Constructor
@@ -92,7 +92,7 @@ public abstract class User {
     public void setUsername(String username, UserRepository userRepository) {
         //We check if the user is anonymous
         if(this.anonymous)
-            throw new IllegalArgumentException(">! Anonymous users cannot be set to anonymous user");
+            return;
 
         //We check if the username is not valid
         if(!this.validUsername(username))

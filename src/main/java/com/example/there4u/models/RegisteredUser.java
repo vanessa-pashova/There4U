@@ -85,36 +85,28 @@ public class RegisteredUser extends User {
 
     //Setters for validity
     //Setters for the personal names of the user: starting with capital letter and the rest is with small letters
+    private String validateAndFormatName(String name, String fieldName) {
+        if (name == null || name.isEmpty())
+            throw new IllegalArgumentException(">! " + fieldName + " cannot be null or empty");
+
+        if (name.length() < 2)
+            throw new IllegalArgumentException(">! " + fieldName + " cannot be less than 2 characters");
+
+        if (name.length() > 15)
+            throw new IllegalArgumentException(">! " + fieldName + " cannot exceed 20 characters");
+
+        if (!name.chars().allMatch(Character::isLetter))
+            throw new IllegalArgumentException(">! " + fieldName + " contains invalid characters");
+
+        return Character.toUpperCase(name.charAt(0)) + name.substring(1);
+    }
+
     public void setFirstName(String firstName) {
-        if(firstName == null || firstName.isEmpty())
-            throw new IllegalArgumentException(">! First name cannot be null or empty");
-
-        if(firstName.length() < 2)
-            throw new IllegalArgumentException(">! First name cannot be less than 2 characters");
-
-        else if(firstName.length() > 20)
-            throw new IllegalArgumentException(">! First name cannot exceed 20 characters");
-
-        if (!firstName.chars().allMatch(Character::isLetter))
-            throw new IllegalArgumentException(">! First name contains invalid characters");
-
-        this.firstName = Character.toUpperCase(firstName.charAt(0)) + firstName.substring(1);
+        this.firstName = validateAndFormatName(firstName, "First name");
     }
 
     public void setLastName(String lastName) {
-        if(lastName == null || lastName.isEmpty())
-            throw new IllegalArgumentException(">! Last name cannot be null or empty");
-
-        if(lastName.length() < 2)
-            throw new IllegalArgumentException(">! Last name cannot be less than 2 characters");
-
-        else if(lastName.length() > 20)
-            throw new IllegalArgumentException(">! Last name cannot exceed 20 characters");
-
-        if (!lastName.chars().allMatch(Character::isLetter))
-            throw new IllegalArgumentException(">! Last name contains invalid characters");
-
-        this.lastName = Character.toUpperCase(lastName.charAt(0)) + lastName.substring(1);
+        this.lastName = validateAndFormatName(lastName, "Last name");
     }
 
     public void setEmail(String email, UserRepository userRepository) {
@@ -152,26 +144,32 @@ public class RegisteredUser extends User {
         //Check if password contains at least one capital letter, one small letter and at least one digit
         boolean hasLowerLetter = false, hasUpperLetter = false, hasDigit = false;
         for(char c : password.toCharArray()) {
+            if(Character.isDigit(c))
+                hasDigit = true;
+
             if(Character.isLowerCase(c))
                 hasLowerLetter = true;
 
             if(Character.isUpperCase(c))
                 hasUpperLetter = true;
-
-            if(Character.isDigit(c))
-                hasDigit = true;
         }
 
         //If at least one of these conditions is false then:
-        if(!hasLowerLetter && !hasUpperLetter && !hasDigit)
+        if(!hasLowerLetter || !hasUpperLetter || !hasDigit)
             throw new IllegalArgumentException(">! Password must contain at least one lower case letter, one capital letter and one digit");
 
         else this.password = password;
     }
 
     public void setPhoneNumber(String phoneNumber, UserRepository userRepository) {
+        //If we remove the phone number, we have to stop the setter right here
+        if(phoneNumber == null || phoneNumber.isEmpty()) {
+            this.phoneNumber = phoneNumber;
+            return;
+        }
+
         //Phone number must be empty or contains exactly 10 digits
-        if(phoneNumber.length() != 0 || phoneNumber.length() != 10)
+        if(phoneNumber.length() != 10)
             throw new IllegalArgumentException(">! Invalid phone number length");
 
         //Must start with 087, 088 or 089

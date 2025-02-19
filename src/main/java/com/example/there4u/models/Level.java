@@ -23,12 +23,12 @@ public class Level {
     }
 
     public void addProgress(double percentage) {
-        if(percentage != 0.05 || percentage != 0.1 || percentage != 0.15 || percentage != 0.20)
+        if (!(percentage == 0.05 || percentage == 0.1 || percentage == 0.15 || percentage == 0.2))
             throw new IllegalArgumentException(">! Invalid percentage: " + percentage);
 
         this.progress += percentage;
 
-        while(this.progress > 1) {
+        while (this.progress > 1) {
             this.level++;
             this.progress -= 1;
         }
