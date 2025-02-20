@@ -137,7 +137,13 @@ public class RegisteredUser extends User {
         if(password == null || password.isEmpty())
             throw new IllegalArgumentException(">! Password cannot be null or empty");
 
-        //Check if password length is [8,20] characters long
+        //Check if password is hashed
+        if (password.length() > 20 && password.startsWith("$2a$")) {
+            this.password = password;
+            return;
+        }
+
+        //Check if password length is [8,20] characters long before hashing
         if(password.length() < 8 || password.length() > 20)
             throw new IllegalArgumentException(">! Password must contain [8, 20] characters");
 
