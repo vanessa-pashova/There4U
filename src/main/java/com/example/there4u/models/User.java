@@ -21,9 +21,9 @@ public abstract class User {
     @Column(unique = true, nullable = false)
     @NotBlank(message = ">! Username must not be empty.")
     @Size(max = 30, message = ">! Username cannot contain more than 30 symbols.")
-    private String username;
+    protected String username;
 
-    private boolean anonymous;
+    protected boolean anonymous;
 
     @Transient
     private static final Random random = new Random();

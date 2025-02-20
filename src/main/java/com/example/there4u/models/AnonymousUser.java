@@ -13,6 +13,11 @@ public class AnonymousUser extends User {
 
     public AnonymousUser() {
         super();
+        this.setAnonymousDefaults();
+    }
+
+    private void setAnonymousDefaults() {
+        this.username = "AnonymousUser"; //Guarantee that the username is always AnonymousUser
     }
 
     @Override
