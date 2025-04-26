@@ -5,6 +5,10 @@ import com.example.there4u.model.validators.NameValidator;
 import com.example.there4u.model.validators.PasswordValidator;
 import com.example.there4u.model.validators.PhoneNumberValidator;
 import com.example.there4u.service.geo.OSMBatchAddressValidator;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -29,25 +33,34 @@ import org.springframework.validation.annotation.Validated;
 
 @Getter
 @NoArgsConstructor
+@MappedSuperclass
 public abstract class User {
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,19}$", message = "!> Invalid username. Username must contain only letters, numbers or underscores. And must be 4-19 characters long.")
+    @Column(name = "username")
     protected String username;
 
     @Pattern(regexp = "^[A-Z][a-z]+( [A-Z][a-z]+)*$", message = "!> Invalid name")
+    @Column(name = "name")
     protected String name;
 
     @Email
+    @Column(name = "email")
     protected String email;
 
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Invalid password. Password must contain at least 8 symbols from which at least one uppercase letter, at least one lowercase letter, and at least one number")
+    @Column(name = "password")
     protected String password;
 
     @Pattern(regexp = "^(?:(?:\\+359|00359|0)8[7-9][0-9]{7}|2[0-9]{7})$", message = "!> Invalid phone")
+    @Column(name = "phone")
     protected String phone;
 
+    @Column(name = "address")
     protected String address;
 
+    @Enumerated(EnumType.STRING)
     @Setter
+    @Column(name = "type")
     protected TypeOfUser typeOfUser;
 
     public User(String username, String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
