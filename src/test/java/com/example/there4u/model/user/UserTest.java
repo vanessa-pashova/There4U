@@ -1,5 +1,8 @@
 package com.example.there4u.model.user;
 
+import jakarta.validation.*;
+import lombok.val;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -8,17 +11,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
     private static class TestUser extends User {
-        public TestUser(String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
-            super(name, email, password, phone, address, typeOfUser);
+        public TestUser(String username, String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
+            super(username, name, email, password, phone, address, typeOfUser);
         }
     }
 
     private TestUser nullTestUser,
-                     user = new TestUser("Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
+                     user = new TestUser("papi_chulo","Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
 
     @Test
     public void validUserCreation() {
-        nullTestUser = new TestUser("Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
+        nullTestUser = new TestUser("papi_chulo","Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
+        assertEquals("papi_chulo", nullTestUser.getUsername());
         assertEquals("Petar Georgiev Ivanov", nullTestUser.getName());
         assertEquals("papi@icloud.com", nullTestUser.getEmail());
         assertEquals("PastaLover07", nullTestUser.getPassword());
@@ -39,7 +43,7 @@ public class UserTest {
            user.setName("   Petar        Georgiev Ivanov    ");
         });
 
-        assertEquals(">! Name contains multiple spaces in a row [setName(), User]", e.getMessage());
+        assertEquals(">! Name contains multiple spaces in a row [validateName(), NameValidator]", e.getMessage());
     }
 
     @Test
@@ -48,7 +52,7 @@ public class UserTest {
             user.setName("Petar12 Georgiev560 Ivanov4");
         });
 
-        assertEquals(">! Name must only contain letters [setName(), User]", e.getMessage());
+        assertEquals(">! Name must only contain letters [validateName(), NameValidator]", e.getMessage());
     }
 
     @Test
@@ -103,7 +107,7 @@ public class UserTest {
             user.setPassword("Pasta07");
         });
 
-        assertEquals(">! Password must contain at least 8 symbols [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least 8 symbols [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
@@ -112,7 +116,7 @@ public class UserTest {
             user.setPassword("pastalover07");
         });
 
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
@@ -121,7 +125,7 @@ public class UserTest {
             user.setPassword("PASTALOVER07");
         });
 
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
@@ -130,7 +134,7 @@ public class UserTest {
             user.setPassword("PastaLover");
         });
 
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
