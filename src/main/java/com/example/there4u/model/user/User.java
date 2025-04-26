@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Abstract class representing a generic user in the system.
@@ -29,7 +30,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public abstract class User {
-    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,19}$", message = "!> Invalid username. Username must contain only letters, numbers or underscores.")
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,19}$", message = "!> Invalid username. Username must contain only letters, numbers or underscores. And must be 4-19 characters long.")
     protected String username;
 
     @Pattern(regexp = "^[A-Z][a-z]+( [A-Z][a-z]+)*$", message = "!> Invalid name")
