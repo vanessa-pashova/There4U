@@ -5,6 +5,8 @@ import com.example.there4u.model.validators.NameValidator;
 import com.example.there4u.model.validators.PasswordValidator;
 import com.example.there4u.model.validators.PhoneNumberValidator;
 import com.example.there4u.service.geo.OSMBatchAddressValidator;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,28 +23,23 @@ import lombok.Setter;
  * - phone: User's phone number, validated using custom logic.
  * - address: User's address, validated through OpenStreetMap API or equivalent validator.
  * - typeOfUser: Enum defining the type of user (e.g., anonymous, registered, moderator, etc.).
- *
- * Validation:
- * All setters include strict validation rules to ensure data integrity and consistent formatting.
- *
- * Dependencies:
- * - EmailValidator: Utility for validating email addresses.
- * - PhoneNumberValidator: Utility for validating phone numbers.
- * - OSMBatchAddressValidator: Service for validating physical addresses using OSM data.
- *
- * Example usage (in subclasses):
- * public class RegisteredUser extends User { ... }
- *
- * @author
  */
 
 @Getter
 @NoArgsConstructor
 public abstract class User {
+    @Pattern(regexp = "^[A-Z][a-z]+( [A-Z][a-z]+)*$", message = "!> Invalid name")
     protected String name;
+
+    @Email
     protected String email;
+
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Password must contain at least 8 symbols from which at least one uppercase letter, at least one lowercase letter, and at least one number")
     protected String password;
+
+    @Pattern(regexp = "^(?:(?:\\+359|00359|0)8[7-9][0-9]{7}|2[0-9]{7})$", message = "!> Invalid phone")
     protected String phone;
+
     protected String address;
 
     @Setter
