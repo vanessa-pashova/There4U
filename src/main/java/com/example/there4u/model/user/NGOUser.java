@@ -1,21 +1,22 @@
 package com.example.there4u.model.user;
 
 import com.example.there4u.model.validators.NGOidValidator;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
+@Table(name = "ngo_user")
 public class NGOUser extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
     private long NGOid;
 
+    @Column(name = "description")
     private String description;
 
     public NGOUser(String username, String name, String email, String password, String phoneNumber, String address, TypeOfUser typeOfUser, String description) {
-        super(username, name, email, password, phoneNumber, address, typeOfUser);
+        super(username, name, email, password, phoneNumber, address, TypeOfUser.NGO);
         this.setDescription(description);
     }
 
