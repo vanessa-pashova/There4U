@@ -5,6 +5,7 @@ import com.example.there4u.model.validators.NameValidator;
 import com.example.there4u.model.validators.PasswordValidator;
 import com.example.there4u.model.validators.PhoneNumberValidator;
 import com.example.there4u.service.geo.OSMBatchAddressValidator;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -28,13 +29,16 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public abstract class User {
+    @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,19}$", message = "!> Invalid username. Username must contain only letters, numbers or underscores.")
+    protected String username;
+
     @Pattern(regexp = "^[A-Z][a-z]+( [A-Z][a-z]+)*$", message = "!> Invalid name")
     protected String name;
 
     @Email
     protected String email;
 
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Password must contain at least 8 symbols from which at least one uppercase letter, at least one lowercase letter, and at least one number")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Invalid password. Password must contain at least 8 symbols from which at least one uppercase letter, at least one lowercase letter, and at least one number")
     protected String password;
 
     @Pattern(regexp = "^(?:(?:\\+359|00359|0)8[7-9][0-9]{7}|2[0-9]{7})$", message = "!> Invalid phone")
@@ -45,11 +49,12 @@ public abstract class User {
     @Setter
     protected TypeOfUser typeOfUser;
 
-    public User(String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
-        this.setName(name);
-        this.setEmail(email);
-        this.setPassword(password);
-        this.setPhone(phone);
+    public User(String username, String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
+        this.username = username;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
         this.setAddress(address);
         this.setTypeOfUser(typeOfUser);
     }
