@@ -39,7 +39,7 @@ public class UserTest {
            user.setName("   Petar        Georgiev Ivanov    ");
         });
 
-        assertEquals(">! Name contains multiple spaces in a row [setName(), User]", e.getMessage());
+        assertEquals(">! Name contains multiple spaces in a row [validateName(), NameValidator]", e.getMessage());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class UserTest {
             user.setName("Petar12 Georgiev560 Ivanov4");
         });
 
-        assertEquals(">! Name must only contain letters [setName(), User]", e.getMessage());
+        assertEquals(">! Name must only contain letters [validateName(), NameValidator]", e.getMessage());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class UserTest {
             user.setPassword("Pasta07");
         });
 
-        assertEquals(">! Password must contain at least 8 symbols [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least 8 symbols [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
@@ -112,7 +112,7 @@ public class UserTest {
             user.setPassword("pastalover07");
         });
 
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class UserTest {
             user.setPassword("PASTALOVER07");
         });
 
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
@@ -130,7 +130,7 @@ public class UserTest {
             user.setPassword("PastaLover");
         });
 
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [setPassword(), User]", e.getMessage());
+        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
     }
 
     @Test
