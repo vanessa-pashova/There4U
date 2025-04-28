@@ -1,35 +1,33 @@
-package com.example.there4u.model.contributor;
+package com.example.there4u.model.user;
 
-import com.example.there4u.model.user.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "contributor")
 public class Contributor extends User {
-    TypeOfContributor typeOfContributor;
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "ContributorID")
     @NotNull(message = ">! ContributorID cannot be null")
     @Pattern(regexp = "^(91|92|93)[0-9]{3}$", message = "Contributor ID must start with 91, 92 or 93 and have exactly 5 digits.")
+    @Column(name = "contributor_id")
     private String ContributorID;
 
     @Column(name = "description")
     private String description = "[No description added]";
 
-    private boolean isValidTypeOfContributor(TypeOfContributor typeOfContributor, String ContributorID) {
+    private boolean isValidTypeOfUser(TypeOfUser typeOfUser, String ContributorID) {
         int code = Integer.parseInt(ContributorID.substring(0, 2));
         switch(code) {
             case 91: {
-                if(typeOfContributor == TypeOfContributor.CANTEEN) {
+                if(typeOfUser == TypeOfUser.CANTEEN) {
                     return true;
                 }
 
@@ -37,7 +35,7 @@ public class Contributor extends User {
             }
 
             case 92: {
-                if(typeOfContributor == TypeOfContributor.GROCERY_STORE) {
+                if(typeOfUser == TypeOfUser.GROCERY_STORE) {
                     return true;
                 }
 
@@ -45,7 +43,7 @@ public class Contributor extends User {
             }
 
             case 93: {
-                if(typeOfContributor == TypeOfContributor.RESTAURANT) {
+                if(typeOfUser == TypeOfUser.RESTAURANT) {
                     return true;
                 }
 
@@ -56,25 +54,25 @@ public class Contributor extends User {
         return false;
     }
 
-    private void checkContributorIdAndType(TypeOfContributor typeOfContributor, String ContributorID) {
-        if(!isValidTypeOfContributor(typeOfContributor, ContributorID)) {
+    private void checkContributorIdAndType(TypeOfUser typeOfUser, String ContributorID) {
+        if(!isValidTypeOfUser(typeOfUser, ContributorID)) {
             throw new IllegalArgumentException("Contributor ID is not valid or invalid type of contributor");
         }
     }
 
     public Contributor(String username, String name, String email, String password, String phoneNumber, String address, String contributorID, String typeOfContributor, String description) {
         super(username, name, email, password, phoneNumber, address);
-        this.setTypeOfContributor(typeOfContributor);
+        this.setTypeOfUser(typeOfContributor);
         this.ContributorID = contributorID;
-        checkContributorIdAndType(this.typeOfContributor, this.ContributorID);
+        checkContributorIdAndType(this.typeOfUser, this.ContributorID);
         this.setDescription(description);
     }
 
-    public void setTypeOfContributor(String typeOfContributor) {
+    public void setTypeOfUser(String typeOfContributor) {
         switch (typeOfContributor.toUpperCase()) {
-            case "CANTEEN" -> this.typeOfContributor = TypeOfContributor.CANTEEN;
-            case "RESTAURANT" -> this.typeOfContributor = TypeOfContributor.RESTAURANT;
-            case "GROCERY_STORE" -> this.typeOfContributor = TypeOfContributor.GROCERY_STORE;
+            case "CANTEEN" -> this.typeOfUser = TypeOfUser.CANTEEN;
+            case "RESTAURANT" -> this.typeOfUser = TypeOfUser.RESTAURANT;
+            case "GROCERY_STORE" -> this.typeOfUser = TypeOfUser.GROCERY_STORE;
         }
     }
 

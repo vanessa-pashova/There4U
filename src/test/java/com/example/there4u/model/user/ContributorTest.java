@@ -1,7 +1,5 @@
 package com.example.there4u.model.user;
 
-import com.example.there4u.model.contributor.Contributor;
-import com.example.there4u.model.contributor.TypeOfContributor;
 import jakarta.validation.*;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +34,7 @@ public class ContributorTest {
         assertEquals("0887654321", contributor.getPhone());
         assertEquals("bul. Vitosha 15, Sofia", contributor.getAddress());
         assertEquals("91123", contributor.getContributorID());
-        assertEquals(TypeOfContributor.CANTEEN, contributor.getTypeOfContributor());
+        assertEquals(TypeOfUser.CANTEEN, contributor.getTypeOfUser());
         assertEquals("Providing free meals", contributor.getDescription());
     }
 
@@ -106,7 +104,7 @@ public class ContributorTest {
                 "Fine dining experience"
         );
 
-        assertEquals(TypeOfContributor.RESTAURANT, validRestaurantContributor.getTypeOfContributor());
+        assertEquals(TypeOfUser.RESTAURANT, validRestaurantContributor.getTypeOfUser());
         assertEquals("93123", validRestaurantContributor.getContributorID());
     }
 
