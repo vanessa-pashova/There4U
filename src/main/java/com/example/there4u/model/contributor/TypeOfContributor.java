@@ -1,8 +1,7 @@
 package com.example.there4u.model.contributor;
 
 public enum TypeOfContributor {
-    CANTEEN,
-    RESTAURANT,
-    GROCERY_STORE,
-    VOLUNTEER
+    CANTEEN,        // 91***
+    GROCERY_STORE,  // 92***
+    RESTAURANT      // 93***
 }
