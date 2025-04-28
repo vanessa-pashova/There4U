@@ -1,193 +1,187 @@
 package com.example.there4u.model.user;
 
-import jakarta.validation.*;
-import lombok.val;
-import org.junit.jupiter.api.BeforeAll;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
-
+import jakarta.validation.*;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
+
     private static class TestUser extends User {
-        public TestUser(String username, String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
-            super(username, name, email, password, phone, address, typeOfUser);
+        public TestUser(String username, String name, String email, String password, String phone, String address) {
+            super(username, name, email, password, phone, address);
         }
     }
 
-    private TestUser nullTestUser,
-                     user = new TestUser("papi_chulo","Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
+    private static final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
+    private TestUser user = new TestUser(
+            "papi_chulo",
+            "Petar Georgiev",
+            "papi@icloud.com",
+            "Password1",
+            "0882340592",
+            "bul. James Bourchier"
+    );
+
+    // --- Username tests ---
 
     @Test
-    public void validUserCreation() {
-        nullTestUser = new TestUser("papi_chulo","Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
-        assertEquals("papi_chulo", nullTestUser.getUsername());
-        assertEquals("Petar Georgiev Ivanov", nullTestUser.getName());
-        assertEquals("papi@icloud.com", nullTestUser.getEmail());
-        assertEquals("PastaLover07", nullTestUser.getPassword());
-        assertEquals("0882340592", nullTestUser.getPhone());
-        assertEquals("bul. James Bourchier", nullTestUser.getAddress());
-        assertEquals(TypeOfUser.REGULAR_USER, nullTestUser.getTypeOfUser());
+    public void validUsername() {
+        user.username = "papi_chulo";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "username");
+        assertTrue(violations.isEmpty());
     }
 
     @Test
-    public void invalidUserName_SmallLetters() {
-        user.setName("petar georgiev ivanov");
-        assertEquals("Petar Georgiev Ivanov", user.getName());
+    public void invalidUsername_SpecialCharacters() {
+        user.username = "papi.chulo!";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "username");
+        assertFalse(violations.isEmpty());
     }
 
     @Test
-    public void invalidUserName_TooManySpaces() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
-           user.setName("   Petar        Georgiev Ivanov    ");
-        });
-
-        assertEquals(">! Name contains multiple spaces in a row [validateName(), NameValidator]", e.getMessage());
+    public void invalidUsername_TooShort() {
+        user.username = "abc";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "username");
+        assertFalse(violations.isEmpty());
     }
 
     @Test
-    public void invalidUserName_NotAlphabeticSymbols() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
-            user.setName("Petar12 Georgiev560 Ivanov4");
-        });
+    public void invalidUsername_TooLong() {
+        user.username = "this_username_is_way_too_long";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "username");
+        assertFalse(violations.isEmpty());
+    }
 
-        assertEquals(">! Name must only contain letters [validateName(), NameValidator]", e.getMessage());
+    // --- Name tests ---
+
+    @Test
+    public void validName() {
+        user.name = "Petar Georgiev";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "name");
+        assertTrue(violations.isEmpty());
     }
 
     @Test
-    public void validUserEmail() {
-        String emailName = "papi";
-        Set<String> allowedDomains = Set.of("@gmail.com", "@abv.bg", "@yahoo.com", "@mail.com", "@icloud.com", "@outlook.com", "@hotmail.com");
+    public void invalidName_NoCapitalLetter() {
+        user.name = "petar georgiev";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "name");
+        assertFalse(violations.isEmpty());
+    }
 
-        for(String allowedDomain : allowedDomains) {
-            String email = emailName + allowedDomain;
-            user.setEmail(email);
+    @Test
+    public void invalidName_NumbersInName() {
+        user.name = "Petar123 Georgiev";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "name");
+        assertFalse(violations.isEmpty());
+    }
 
-            assertEquals(email, user.getEmail());
+    // --- Email tests ---
+
+    @Test
+    public void validEmail() {
+        user.email = "papi@icloud.com";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "email");
+        assertTrue(violations.isEmpty());
+    }
+
+    @Test
+    public void invalidEmail_NoAtSymbol() {
+        user.email = "papiicloud.com";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "email");
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    public void invalidEmail_BadDomain() {
+        user.email = "papi@icloud";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "email");
+        assertFalse(violations.isEmpty());
+    }
+
+    // --- Password tests ---
+
+    @Test
+    public void validPassword() {
+        user.password = "Password1";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "password");
+        assertTrue(violations.isEmpty());
+    }
+
+    @Test
+    public void invalidPassword_NoUppercase() {
+        user.password = "password1";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "password");
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    public void invalidPassword_NoLowercase() {
+        user.password = "PASSWORD1";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "password");
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    public void invalidPassword_NoDigit() {
+        user.password = "Password";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "password");
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    public void invalidPassword_TooShort() {
+        user.password = "Pas1";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "password");
+        assertFalse(violations.isEmpty());
+    }
+
+    // --- Phone tests ---
+
+    @Test
+    public void validPhone() {
+        Set<String> validPhones = Set.of(
+                "27771300",
+                "0874341011", "0884341011", "0894341011",
+                "00359874341011", "00359884341011", "00359894341011",
+                "+359874341011", "+359884341011", "+359894341011"
+        );
+
+        for (String phone : validPhones) {
+            user.phone = phone;
+            Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "phone");
+            assertTrue(violations.isEmpty(), "Expected valid phone but got violation for: " + phone);
         }
     }
 
     @Test
-    public void validUserEmail_WithDigits() {
-        user.setEmail("papi012@icloud.com");
-        assertEquals("papi012@icloud.com", user.getEmail());
+    public void invalidPhone_WrongPrefix() {
+        user.phone = "0864341011";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "phone");
+        assertFalse(violations.isEmpty());
     }
 
     @Test
-    public void validUserEmail_DomainChange() {
-        user.setEmail("papi@yahoo.com");
-        assertEquals("papi@yahoo.com", user.getEmail());
+    public void invalidPhone_TooShort() {
+        user.phone = "0884341";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "phone");
+        assertFalse(violations.isEmpty());
     }
 
     @Test
-    public void invalidUserEmail_CapitalLetters() {
-        user.setEmail("Pesho_Be@icloud.com");
-        assertEquals("pesho_be@icloud.com", user.getEmail());
+    public void invalidPhone_TooLong() {
+        user.phone = "088434101112345";
+        Set<ConstraintViolation<TestUser>> violations = validator.validateProperty(user, "phone");
+        assertFalse(violations.isEmpty());
     }
 
-    @Test
-    public void invalidUserEmail_InvalidEmailDomain() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
-            user.setEmail("papi@gmx.de");
-        });
-
-        assertEquals(">! Invalid email address [setEmail(), User]", e.getMessage());
-    }
+    // --- Address tests (only setAddress() can validate) ---
 
     @Test
-    public void validUserPassword() {
-        user.setPassword("LasagnaLover199!");
-        assertEquals("LasagnaLover199!", user.getPassword());
-    }
-
-    @Test
-    public void invalidUserPassword_ShortPassword() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPassword("Pasta07");
-        });
-
-        assertEquals(">! Password must contain at least 8 symbols [validatePassword(), PasswordValidator]", e.getMessage());
-    }
-
-    @Test
-    public void invalidUserPassword_NoCapitalLetter() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPassword("pastalover07");
-        });
-
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
-    }
-
-    @Test
-    public void invalidUserPassword_NoSmallLetter() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPassword("PASTALOVER07");
-        });
-
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
-    }
-
-    @Test
-    public void invalidUserPassword_NoDigit() {
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPassword("PastaLover");
-        });
-
-        assertEquals(">! Password must contain at least one: capital letter, small letter and a digit [validatePassword(), PasswordValidator]", e.getMessage());
-    }
-
-    @Test
-    public void validUserPhoneNumber() {
-        Set<String> examples = Set.of("27771300",
-                                    "0874341011", "0884341011", "0894341011",
-                                    "00359874341011", "00359884341011", "00359894341011",
-                                    "+359874341011", "+359884341011", "+359894341011");
-
-        for(String example : examples) {
-            user.setPhone(example);
-            assertEquals(example, user.getPhone());
-        }
-    }
-
-    @Test
-    public void invalidUserPhoneNumber_InvalidLandNumber() {
-        IllegalArgumentException e1 = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPhone("37771300");
-        });
-
-        assertEquals(">! Invalid phone number [setPhone(), User]", e1.getMessage());
-
-        IllegalArgumentException e2 = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPhone("271300");
-        });
-
-        assertEquals(">! Invalid phone number [setPhone(), User]", e2.getMessage());
-    }
-
-    @Test
-    public void invalidUserPhoneNumber_InvalidMobileNumber() {
-        IllegalArgumentException e1 = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPhone("0864341011");
-        });
-
-        assertEquals(">! Invalid phone number [setPhone(), User]", e1.getMessage());
-
-        IllegalArgumentException e2 = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPhone("369864341011");
-        });
-
-        assertEquals(">! Invalid phone number [setPhone(), User]", e2.getMessage());
-
-        IllegalArgumentException e3 = assertThrows(IllegalArgumentException.class, () -> {
-            user.setPhone("088434101");
-        });
-
-        assertEquals(">! Invalid phone number [setPhone(), User]", e3.getMessage());
-    }
-
-    @Test
-    public void validUserAddress() {
+    public void validAddress() {
         user.setAddress("Атанас Манчев 21, София");
         assertEquals("Атанас Манчев 21, София", user.getAddress());
 
@@ -196,7 +190,7 @@ public class UserTest {
     }
 
     @Test
-    public void invalidUserAddress_InvalidAddress() {
+    public void invalidAddress() {
         IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
             user.setAddress("Баба Спуза 123, Варна");
         });
