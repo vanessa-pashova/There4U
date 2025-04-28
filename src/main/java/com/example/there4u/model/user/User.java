@@ -26,6 +26,7 @@ import lombok.Setter;
  */
 
 @Getter
+@Setter
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class User {
