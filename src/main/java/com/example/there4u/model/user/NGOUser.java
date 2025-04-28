@@ -18,7 +18,7 @@ public class NGOUser extends User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     @NotNull(message = ">! NGOid cannot be null")
-    @Pattern(regexp = "^(91|92|93)[0-9]{3}$", message = ">! NGOid must start with 91, 92, or 93 and be 5 digits")
+    @Pattern(regexp = "^(100)[0-9]{3}$", message = ">! NGOid must start with 100 and must be 6 digits")
     private String NGOid;
 
     @Column(name = "description")

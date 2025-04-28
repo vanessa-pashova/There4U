@@ -41,28 +41,28 @@ public class NGOTest {
 
     @Test
     public void validNGOid() {
-        ngoUser.setNGOid("92123");
+        ngoUser.setNGOid("100123");
         Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
         assertTrue(violations.isEmpty());
     }
 
     @Test
     public void invalidNGOid_StartsWrong() {
-        ngoUser.setNGOid("81123"); // not starting with 91, 92 or 93
+        ngoUser.setNGOid("101123");
         Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
         assertFalse(violations.isEmpty());
     }
 
     @Test
     public void invalidNGOid_WrongLength() {
-        ngoUser.setNGOid("9212"); // only 4 digits
+        ngoUser.setNGOid("10012");
         Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
         assertFalse(violations.isEmpty());
     }
 
     @Test
     public void invalidNGOid_ContainsLetters() {
-        ngoUser.setNGOid("92a23"); // contains letter 'a'
+        ngoUser.setNGOid("100a2");
         Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
         assertFalse(violations.isEmpty());
     }
