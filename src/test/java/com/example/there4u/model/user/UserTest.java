@@ -1,5 +1,8 @@
 package com.example.there4u.model.user;
 
+import jakarta.validation.*;
+import lombok.val;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -8,17 +11,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserTest {
     private static class TestUser extends User {
-        public TestUser(String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
-            super(name, email, password, phone, address, typeOfUser);
+        public TestUser(String username, String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
+            super(username, name, email, password, phone, address, typeOfUser);
         }
     }
 
     private TestUser nullTestUser,
-                     user = new TestUser("Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
+                     user = new TestUser("papi_chulo","Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
 
     @Test
     public void validUserCreation() {
-        nullTestUser = new TestUser("Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
+        nullTestUser = new TestUser("papi_chulo","Petar Georgiev Ivanov", "papi@icloud.com", "PastaLover07", "0882340592", "bul. James Bourchier", TypeOfUser.REGULAR_USER);
+        assertEquals("papi_chulo", nullTestUser.getUsername());
         assertEquals("Petar Georgiev Ivanov", nullTestUser.getName());
         assertEquals("papi@icloud.com", nullTestUser.getEmail());
         assertEquals("PastaLover07", nullTestUser.getPassword());
