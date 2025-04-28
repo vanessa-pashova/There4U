@@ -1,21 +1,15 @@
 package com.example.there4u.model.user;
 
-import com.example.there4u.model.validators.EmailValidator;
-import com.example.there4u.model.validators.NameValidator;
-import com.example.there4u.model.validators.PasswordValidator;
-import com.example.there4u.model.validators.PhoneNumberValidator;
 import com.example.there4u.service.geo.OSMBatchAddressValidator;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * Abstract class representing a generic user in the system.
@@ -43,9 +37,13 @@ public abstract class User {
     @Column(name = "name")
     protected String name;
 
-    @Email
+    @Pattern(
+            regexp = "^[\\w.%+-]+@[\\w.-]+\\.(com|bg|net|org)$",
+            message = "!> Invalid email domain. Allowed domains are: .com, .bg, .net, .org"
+    )
     @Column(name = "email")
     protected String email;
+
 
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Invalid password. Password must contain at least 8 symbols from which at least one uppercase letter, at least one lowercase letter, and at least one number")
     @Column(name = "password")
@@ -63,40 +61,13 @@ public abstract class User {
     @Column(name = "type")
     protected TypeOfUser typeOfUser;
 
-    public User(String username, String name, String email, String password, String phone, String address, TypeOfUser typeOfUser) {
+    public User(String username, String name, String email, String password, String phone, String address) {
         this.username = username;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.setAddress(address);
-        this.setTypeOfUser(typeOfUser);
-    }
-
-    public void setName(String name) {
-       this.name = NameValidator.validateName(name);
-    }
-
-    public void setEmail(String email) {
-        if(!EmailValidator.isValidEmail(email)) {
-            throw new IllegalArgumentException(">! Invalid email address [setEmail(), User]");
-        }
-
-        this.email = email.toLowerCase();
-    }
-
-    public void setPassword(String password) {
-        if(PasswordValidator.validatePassword(password)) {
-            this.password = password;
-        }
-    }
-
-    public void setPhone(String phone) {
-        if(!PhoneNumberValidator.isValidPhoneNumber(phone)) {
-            throw new IllegalArgumentException(">! Invalid phone number [setPhone(), User]");
-        }
-
-        this.phone = phone;
     }
 
     public void setAddress(String address) {

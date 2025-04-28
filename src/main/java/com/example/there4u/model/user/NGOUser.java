@@ -1,28 +1,34 @@
 package com.example.there4u.model.user;
 
-import com.example.there4u.model.validators.NGOidValidator;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@Entity
 @Table(name = "ngo_user")
 public class NGOUser extends User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
-    private long NGOid;
+    @NotNull(message = ">! NGOid cannot be null")
+    @Pattern(regexp = "^(91|92|93)[0-9]{3}$", message = ">! NGOid must start with 91, 92, or 93 and be 5 digits")
+    private String NGOid;
 
     @Column(name = "description")
-    private String description;
+    private String description = "[No description added]";
 
-    public NGOUser(String username, String name, String email, String password, String phoneNumber, String address, TypeOfUser typeOfUser, String description) {
-        super(username, name, email, password, phoneNumber, address, TypeOfUser.NGO);
-        this.setDescription(description);
-    }
-
-    public void setNGOid(long NGOid) {
-        NGOidValidator.validateNGOid(NGOid);
+    public NGOUser(String username, String name, String email, String password, String phoneNumber, String address, String NGOid, String description) {
+        super(username, name, email, password, phoneNumber, address);
         this.NGOid = NGOid;
+        this.setDescription(description);
+        this.typeOfUser = TypeOfUser.NGO;
     }
 
     public void setDescription(String description) {
