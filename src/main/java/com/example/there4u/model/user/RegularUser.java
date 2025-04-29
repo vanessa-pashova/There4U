@@ -15,7 +15,7 @@ public class RegularUser extends User {
     private static long userId = 94000;
 
     @Pattern(regexp = "^[0-9]{10}", message = "!> Incorrect Civil Number. Civil Number must be exactly 10 digits")
-    @Column(name = "ucn")
+    @Column(name = "ucn", unique = true)
     private String UCN; //Unique Civil Number
 
     @Override
@@ -31,6 +31,7 @@ public class RegularUser extends User {
         super(username, name, email, password, phoneNumber, address);
         this.UCN = UCN;
         this.setTypeOfUser(typeOfUser);
+        this.id = generateId();
     }
 
     public void setTypeOfUser(TypeOfUser typeOfUser) {
