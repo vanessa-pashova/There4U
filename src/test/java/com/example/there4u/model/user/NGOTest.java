@@ -18,7 +18,6 @@ public class NGOTest {
             "StrongPass1",
             "0881234567",
             "Bulgaria 12, Sofia",
-            "91123",
             "Helping homeless people"
     );
 
@@ -32,46 +31,8 @@ public class NGOTest {
         assertEquals("StrongPass1", ngoUser.getPassword());
         assertEquals("0881234567", ngoUser.getPhone());
         assertEquals("Bulgaria 12, Sofia", ngoUser.getAddress());
-        assertEquals("91123", ngoUser.getNGOid());
         assertEquals("Helping homeless people", ngoUser.getDescription());
         assertEquals(TypeOfUser.NGO, ngoUser.getTypeOfUser());
-    }
-
-    // --- NGOid validation tests ---
-
-    @Test
-    public void validNGOid() {
-        ngoUser.setNGOid("100123");
-        Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
-        assertTrue(violations.isEmpty());
-    }
-
-    @Test
-    public void invalidNGOid_StartsWrong() {
-        ngoUser.setNGOid("101123");
-        Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    public void invalidNGOid_WrongLength() {
-        ngoUser.setNGOid("10012");
-        Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    public void invalidNGOid_ContainsLetters() {
-        ngoUser.setNGOid("100a2");
-        Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
-        assertFalse(violations.isEmpty());
-    }
-
-    @Test
-    public void invalidNGOid_Null() {
-        ngoUser.setNGOid(null);
-        Set<ConstraintViolation<NGOUser>> violations = validator.validateProperty(ngoUser, "NGOid");
-        assertFalse(violations.isEmpty());
     }
 
     // --- Description tests ---

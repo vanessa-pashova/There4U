@@ -13,12 +13,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "contributor")
 public class Contributor extends User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @NotNull(message = ">! ContributorID cannot be null")
-    @Pattern(regexp = "^(91|92|93)[0-9]{3}$", message = "Contributor ID must start with 91, 92 or 93 and have exactly 5 digits.")
-    @Column(name = "contributor_id")
-    private String ContributorID;
+
+    private static long canteenId = 91000;
+    private static long groceryStoreId = 92000;
+    private static long restaurantId = 93000;
 
     @Column(name = "description")
     private String description = "[No description added]";
@@ -54,17 +52,41 @@ public class Contributor extends User {
         return false;
     }
 
-    private void checkContributorIdAndType(TypeOfUser typeOfUser, String ContributorID) {
-        if(!isValidTypeOfUser(typeOfUser, ContributorID)) {
-            throw new IllegalArgumentException("Contributor ID is not valid or invalid type of contributor");
+    //private void checkContributorIdAndType(TypeOfUser typeOfUser, String ContributorID) {
+    //    if(!isValidTypeOfUser(typeOfUser, ContributorID)) {
+    //        throw new IllegalArgumentException("Contributor ID is not valid or invalid type of contributor");
+    //    }
+    //}
+
+    @Override
+    protected long generateId()
+    {
+        switch(this.typeOfUser)
+        {
+            case CANTEEN:
+                if(canteenId < 92000) {
+                    return canteenId++;
+                }
+                else throw new IllegalArgumentException("The database has enough canteen contributors");
+            case GROCERY_STORE:
+                if(groceryStoreId < 93000) {
+                    return groceryStoreId++;
+                }
+                else throw new IllegalArgumentException("The database has enough grocery store contributors");
+            case RESTAURANT:
+                if(restaurantId < 94000) {
+                    return restaurantId++;
+                }
+                else throw new IllegalArgumentException("The database has enough restaurant contributors");
+            default:
+                throw new IllegalArgumentException("Invalid type of contributor");
         }
     }
 
-    public Contributor(String username, String name, String email, String password, String phoneNumber, String address, String contributorID, String typeOfContributor, String description) {
+    public Contributor(String username, String name, String email, String password, String phoneNumber, String address, String typeOfContributor, String description) {
         super(username, name, email, password, phoneNumber, address);
         this.setTypeOfUser(typeOfContributor);
-        this.ContributorID = contributorID;
-        checkContributorIdAndType(this.typeOfUser, this.ContributorID);
+        this.setId(generateId());
         this.setDescription(description);
     }
 
