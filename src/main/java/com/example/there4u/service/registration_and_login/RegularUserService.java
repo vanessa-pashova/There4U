@@ -1,5 +1,7 @@
 package com.example.there4u.service.registration_and_login;
 
+import com.example.there4u.dto.RegularUserDto;
+import com.example.there4u.dto.RegularUserRequest;
 import com.example.there4u.model.user.RegularUser;
 import com.example.there4u.repository.RegularUserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -66,6 +68,20 @@ public class RegularUserService {
 
         regularUserRepository.save(user);
         log.info("Regular User successfully edited their {}, id: {}", action, user.getId());
+    }
+
+    public RegularUserDto createRegularUser(RegularUserRequest regularUserRequest) {
+        RegularUser regularUser = new RegularUser(
+                regularUserRequest.username(),
+                regularUserRequest.name(),
+                regularUserRequest.email(),
+                regularUserRequest.password(),
+                regularUserRequest.phone(),
+                regularUserRequest.address(),
+                regularUserRequest.ucn()
+        );
+        registerRegularUser(regularUser);
+        return RegularUserDto.fromEntity(regularUser);
     }
 
 
