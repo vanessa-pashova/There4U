@@ -37,7 +37,7 @@ public abstract class User {
     protected long id;
 
     @Pattern(regexp = "^[A-Za-z][A-Za-z0-9_]{4,19}$", message = "!> Invalid username. Username must contain only letters, numbers or underscores. And must be 4-19 characters long.")
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     protected String username;
 
     @Pattern(regexp = "^[A-Z][a-z]+( [A-Z][a-z]+)*$", message = "!> Invalid name")
