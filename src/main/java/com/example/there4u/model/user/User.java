@@ -66,7 +66,6 @@ public abstract class User {
     protected TypeOfUser typeOfUser;
 
     public User(String username, String name, String email, String password, String phone, String address) {
-        this.id = generateId();
         this.username = username;
         this.name = name;
         this.email = email;

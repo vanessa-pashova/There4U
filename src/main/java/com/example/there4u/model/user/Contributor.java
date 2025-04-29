@@ -63,17 +63,17 @@ public class Contributor extends User {
     {
         switch(this.typeOfUser)
         {
-            case CANTEEN:
+            case TypeOfUser.CANTEEN:
                 if(canteenId < 92000) {
                     return canteenId++;
                 }
                 else throw new IllegalArgumentException("The database has enough canteen contributors");
-            case GROCERY_STORE:
+            case TypeOfUser.GROCERY_STORE:
                 if(groceryStoreId < 93000) {
                     return groceryStoreId++;
                 }
                 else throw new IllegalArgumentException("The database has enough grocery store contributors");
-            case RESTAURANT:
+            case TypeOfUser.RESTAURANT:
                 if(restaurantId < 94000) {
                     return restaurantId++;
                 }
