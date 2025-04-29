@@ -1,5 +1,6 @@
 package com.example.there4u.model.user;
 
+import com.example.there4u.model.badge.Badge;
 import com.example.there4u.service.geo.OSMBatchAddressValidator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -7,6 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Abstract class representing a generic user in the system.
@@ -64,6 +68,14 @@ public abstract class User {
     @Setter
     @Column(name = "type")
     protected TypeOfUser typeOfUser;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_badge",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "badge_id")
+    )
+    protected Set<Badge> badges = new HashSet<>();
 
     public User(String username, String name, String email, String password, String phone, String address) {
         this.id = generateId();
