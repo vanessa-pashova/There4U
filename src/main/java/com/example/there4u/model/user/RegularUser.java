@@ -20,10 +20,10 @@ public class RegularUser extends User {
 
     @Override
     protected long generateId() {
-        if(userId >= 100000)
-        {
+        if (userId >= 100000) {
             throw new IllegalArgumentException("The database has enough users");
         }
+
         return userId++;
     }
 

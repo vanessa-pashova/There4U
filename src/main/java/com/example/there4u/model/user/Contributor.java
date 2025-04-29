@@ -1,8 +1,6 @@
 package com.example.there4u.model.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,9 +21,9 @@ public class Contributor extends User {
 
     private boolean isValidTypeOfUser(TypeOfUser typeOfUser, String ContributorID) {
         int code = Integer.parseInt(ContributorID.substring(0, 2));
-        switch(code) {
+        switch (code) {
             case 91: {
-                if(typeOfUser == TypeOfUser.CANTEEN) {
+                if (typeOfUser == TypeOfUser.CANTEEN) {
                     return true;
                 }
 
@@ -33,7 +31,7 @@ public class Contributor extends User {
             }
 
             case 92: {
-                if(typeOfUser == TypeOfUser.GROCERY_STORE) {
+                if (typeOfUser == TypeOfUser.GROCERY_STORE) {
                     return true;
                 }
 
@@ -41,7 +39,7 @@ public class Contributor extends User {
             }
 
             case 93: {
-                if(typeOfUser == TypeOfUser.RESTAURANT) {
+                if (typeOfUser == TypeOfUser.RESTAURANT) {
                     return true;
                 }
 
@@ -52,34 +50,37 @@ public class Contributor extends User {
         return false;
     }
 
-    //private void checkContributorIdAndType(TypeOfUser typeOfUser, String ContributorID) {
-    //    if(!isValidTypeOfUser(typeOfUser, ContributorID)) {
-    //        throw new IllegalArgumentException("Contributor ID is not valid or invalid type of contributor");
-    //    }
-    //}
-
     @Override
-    protected long generateId()
-    {
-        switch(this.typeOfUser)
-        {
+    protected long generateId() {
+        switch (this.typeOfUser) {
             case TypeOfUser.CANTEEN:
-                if(canteenId < 92000) {
+                if (canteenId < 92000) {
                     return canteenId++;
                 }
-                else throw new IllegalArgumentException("The database has enough canteen contributors");
+
+                else {
+                    throw new IllegalArgumentException("The database has enough canteen contributors");
+                }
+
             case TypeOfUser.GROCERY_STORE:
-                if(groceryStoreId < 93000) {
+                if (groceryStoreId < 93000) {
                     return groceryStoreId++;
                 }
-                else throw new IllegalArgumentException("The database has enough grocery store contributors");
+
+                else {
+                    throw new IllegalArgumentException("The database has enough grocery store contributors");
+                }
+
             case TypeOfUser.RESTAURANT:
-                if(restaurantId < 94000) {
+                if (restaurantId < 94000) {
                     return restaurantId++;
                 }
-                else throw new IllegalArgumentException("The database has enough restaurant contributors");
-            default:
-                throw new IllegalArgumentException("Invalid type of contributor");
+
+                else {
+                    throw new IllegalArgumentException("The database has enough restaurant contributors");
+                }
+
+            default: throw new IllegalArgumentException("Invalid type of contributor");
         }
     }
 
@@ -98,8 +99,8 @@ public class Contributor extends User {
         }
     }
 
-    public void setDescription(String description){
-        if(description == null || description.isEmpty()) {
+    public void setDescription(String description) {
+        if (description == null || description.isEmpty()) {
             this.description = "[No description provided]";
         }
 

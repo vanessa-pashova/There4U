@@ -3,7 +3,6 @@ package com.example.there4u.model.user;
 import com.example.there4u.model.badge.Badge;
 import com.example.there4u.service.geo.OSMBatchAddressValidator;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.Set;
  * Abstract class representing a generic user in the system.
  * Provides common fields and validation logic for all user types.
  * This class is intended to be extended by specific user roles.
- *
+ * <p>
  * Fields:
  * - name: User's full name, formatted with capitalization and validated for alphabetic characters only.
  * - email: User's email address, validated for standard email format.
@@ -87,7 +86,7 @@ public abstract class User {
     }
 
     public void setAddress(String address) {
-        if(!OSMBatchAddressValidator.isValidAddress(address)) {
+        if (!OSMBatchAddressValidator.isValidAddress(address)) {
             throw new IllegalArgumentException(">! Invalid address [setAddress(), User]");
         }
 

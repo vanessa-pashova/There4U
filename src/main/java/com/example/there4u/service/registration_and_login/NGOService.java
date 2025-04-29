@@ -16,7 +16,7 @@ public class NGOService {
 
     public void registerNGO(NGOUser user) {
         this.ngoRepository.save(user);
-        log.info("NGO registered successfully, id: {}", user.getNGOid());
+        log.info("NGO registered successfully, id: {}", user.getId());
     }
 
     public void editNGO(NGOUser user, String target, String newValue) {
@@ -66,22 +66,21 @@ public class NGOService {
 
             default: {
                 log.warn("Attempted to edit unknown field: {}", target);
-                throw new IllegalArgumentException("Invalid target field: " + target);
+                throw new IllegalArgumentException(" " + target);
             }
         }
 
         ngoRepository.save(user);
-        log.info("NGO User successfully edited their {}, id: {}", action, user.getNGOid());
+        log.info("NGO User successfully edited their {}, id: {}", action, user.getId());
     }
 
-
     public void deleteNGO(NGOUser user) {
-        if(user == null) {
+        if (user == null) {
             log.error("Attempted to delete NULL NGO User");
             throw new IllegalArgumentException("User cannot be null");
         }
 
-        String id = user.getNGOid();
+        long id = user.getId();
         this.ngoRepository.delete(user);
         log.info("NGO User successfully deleted, id: {}", id);
     }

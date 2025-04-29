@@ -40,7 +40,7 @@ public class RegularUserService {
                 break;
             }
 
-            case "password":{
+            case "password": {
                 user.setPassword(newValue);
                 action = "password";
                 break;
@@ -70,7 +70,7 @@ public class RegularUserService {
 
 
     public void deleteRegularUser(RegularUser user) {
-        if(user == null) {
+        if (user == null) {
             log.error("Attempted to delete NULL User");
             throw new IllegalArgumentException("User cannot be null");
         }

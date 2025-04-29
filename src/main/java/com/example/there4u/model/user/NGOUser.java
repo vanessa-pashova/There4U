@@ -1,8 +1,6 @@
 package com.example.there4u.model.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,10 +19,10 @@ public class NGOUser extends User {
 
     @Override
     protected long generateId() {
-        if(NGOid >= 101000)
-        {
+        if (NGOid >= 101000) {
             throw new IllegalArgumentException("The database has enough NGO users");
         }
+
         return NGOid++;
     }
 
@@ -36,7 +34,7 @@ public class NGOUser extends User {
     }
 
     public void setDescription(String description) {
-        if(description == null || description.isEmpty()) {
+        if (description == null || description.isEmpty()) {
             this.description = "[No description provided]";
         }
 
