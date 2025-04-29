@@ -1,6 +1,7 @@
 package com.example.there4u.model.validators;
 
-import com.example.there4u.model.contributor.TypeOfContributor;
+import com.example.there4u.model.user.TypeOfUser;
+
 public class ContributorIdValidator {
     private static int len(long num) {
         int count = 0;
@@ -13,7 +14,7 @@ public class ContributorIdValidator {
         return count;
     }
 
-    public static boolean isValidContributorId(long contributorId, TypeOfContributor typeOfContributor) {
+    public static boolean isValidContributorId(long contributorId, TypeOfUser typeOfUser) {
         int idLength = len(contributorId);
 
         if(idLength != 5) {
@@ -23,7 +24,7 @@ public class ContributorIdValidator {
         int code = (int) contributorId / 1000;
         switch (code) {
             case 91: {
-                if(typeOfContributor == TypeOfContributor.CANTEEN) {
+                if(typeOfUser == TypeOfUser.CANTEEN) {
                     return true;
                 }
 
@@ -31,7 +32,7 @@ public class ContributorIdValidator {
             }
 
             case 92: {
-                if(typeOfContributor == TypeOfContributor.GROCERY_STORE) {
+                if(typeOfUser == TypeOfUser.GROCERY_STORE) {
                     return true;
                 }
 
@@ -39,7 +40,7 @@ public class ContributorIdValidator {
             }
 
             case 93: {
-                if(typeOfContributor == TypeOfContributor.RESTAURANT) {
+                if(typeOfUser == TypeOfUser.RESTAURANT) {
                     return true;
                 }
 

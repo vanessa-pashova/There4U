@@ -10,8 +10,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserTest {
 
     private static class TestUser extends User {
+        public static long idCounter = 0;
+        @Override
+        protected long generateId() {
+            return idCounter++;
+        }
+
         public TestUser(String username, String name, String email, String password, String phone, String address) {
             super(username, name, email, password, phone, address);
+            this.id = generateId();
         }
     }
 
