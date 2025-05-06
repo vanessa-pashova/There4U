@@ -1,31 +1,84 @@
 package com.example.there4u.controller;
 
-import com.example.there4u.dto.RegularUserDto;
-import com.example.there4u.dto.RegularUserRequest;
+import com.example.there4u.dto.RegularUser.RegularUserDto;
+import com.example.there4u.dto.RegularUser.RegularUserEditProfileRequest;
+import com.example.there4u.dto.RegularUser.RegularUserRegisterRequest;
+import com.example.there4u.model.user.RegularUser;
 import com.example.there4u.service.registration_and_login.RegularUserService;
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("api/regular-users")
 public class RegularUserController {
     private final RegularUserService regularUserService;
 
-    private RegularUserController(RegularUserService regularUserService) {
+    public RegularUserController(RegularUserService regularUserService) {
         this.regularUserService = regularUserService;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RegularUser> getRegularUser(@PathVariable Long id) {
+        RegularUser user = regularUserService.findRegularUserById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("by-username")
+    public ResponseEntity<RegularUser> getRegularUserByUsername(@RequestParam String username) {
+        RegularUser user = regularUserService.findRegularUserByUsername(username);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("by-email")
+    public ResponseEntity<RegularUser> getRegularUserByEmail(@RequestParam String email) {
+        RegularUser user = regularUserService.findRegularUserByEmail(email);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @PostMapping
-    public ResponseEntity<RegularUserDto> createItem(@Valid @RequestBody RegularUserRequest request) {
-        log.info("Create Item API POST");
+    public ResponseEntity<RegularUserDto> createItem(@Valid @RequestBody RegularUserRegisterRequest request) {
         RegularUserDto created = regularUserService.createRegularUser(request);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RegularUserDto> updateItem(@PathVariable Long id, @Valid @RequestBody RegularUserEditProfileRequest request) {
+        RegularUser user = regularUserService.findRegularUserById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        RegularUserDto updated = regularUserService.updateRegularUser(id, request);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+        RegularUser user = regularUserService.findRegularUserById(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        regularUserService.deleteRegularUser(user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
