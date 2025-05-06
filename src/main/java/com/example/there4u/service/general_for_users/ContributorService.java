@@ -93,4 +93,12 @@ public class ContributorService {
     public Contributor findContributorById(Long id) {
         return contributorRepository.findContributorById(id);
     }
+
+    public Contributor findContributorByUsername(String username) {
+        return contributorRepository.findContributorByUsername(username);
+    }
+
+    public Contributor findContributorByEmail(String email) {
+        return contributorRepository.findContributorByEmail(email);
+    }
 }

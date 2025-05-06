@@ -88,4 +88,12 @@ public class NGOService {
     public NGOUser findNGOUserById(long id) {
         return ngoRepository.findById(id).orElse(null);
     }
+
+    public NGOUser findNGOUserByUsername(String username) {
+        return ngoRepository.findByUsername(username);
+    }
+
+    public NGOUser findNGOUserByEmail(String email) {
+        return ngoRepository.findByEmail(email);
+    }
 }
