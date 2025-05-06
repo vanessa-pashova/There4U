@@ -1,4 +1,4 @@
-package com.example.there4u.service.registration_and_login;
+package com.example.there4u.service.general_for_users;
 
 import com.example.there4u.dto.RegularUser.RegularUserDto;
 import com.example.there4u.dto.RegularUser.RegularUserEditProfileRequest;

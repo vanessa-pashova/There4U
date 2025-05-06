@@ -4,7 +4,7 @@ import com.example.there4u.dto.Contributor.ContributorDto;
 import com.example.there4u.dto.Contributor.ContributorEditProfileRequest;
 import com.example.there4u.dto.Contributor.ContributorRegisterRequest;
 import com.example.there4u.model.user.Contributor;
-import com.example.there4u.service.registration_and_login.ContributorService;
+import com.example.there4u.service.general_for_users.ContributorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

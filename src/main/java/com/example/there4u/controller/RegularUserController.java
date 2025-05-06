@@ -4,7 +4,7 @@ import com.example.there4u.dto.RegularUser.RegularUserDto;
 import com.example.there4u.dto.RegularUser.RegularUserEditProfileRequest;
 import com.example.there4u.dto.RegularUser.RegularUserRegisterRequest;
 import com.example.there4u.model.user.RegularUser;
-import com.example.there4u.service.registration_and_login.RegularUserService;
+import com.example.there4u.service.general_for_users.RegularUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

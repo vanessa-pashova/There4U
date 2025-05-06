@@ -4,7 +4,7 @@ import com.example.there4u.dto.NGOUser.NGODto;
 import com.example.there4u.dto.NGOUser.NGOUserEditProfileRequest;
 import com.example.there4u.dto.NGOUser.NGOUserRegisterRequest;
 import com.example.there4u.model.user.NGOUser;
-import com.example.there4u.service.registration_and_login.NGOService;
+import com.example.there4u.service.general_for_users.NGOService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
