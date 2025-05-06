@@ -1,7 +1,6 @@
-package com.example.there4u.dto;
+package com.example.there4u.dto.RegularUser;
 
 import com.example.there4u.model.user.RegularUser;
-import jakarta.validation.constraints.Null;
 
 public record RegularUserDto(
         long id,
@@ -10,10 +9,9 @@ public record RegularUserDto(
         String address,
         String phone,
         String email,
-        String password,
         String ucn
 ) {
-    // Optional: static factory method for mapping from entity
+    // Optional: static factory method for mapping fromEntity entity
     public static RegularUserDto fromEntity(RegularUser item) {
         return new RegularUserDto(
                 item.getId(),
@@ -22,7 +20,6 @@ public record RegularUserDto(
                 item.getAddress(),
                 item.getPhone(),
                 item.getEmail(),
-                item.getPassword(),
                 item.getUCN()
         );
     }

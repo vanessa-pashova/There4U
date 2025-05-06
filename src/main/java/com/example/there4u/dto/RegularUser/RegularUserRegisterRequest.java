@@ -1,8 +1,8 @@
-package com.example.there4u.dto;
+package com.example.there4u.dto.RegularUser;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record RegularUserRequest(
+public record RegularUserRegisterRequest(
         @NotBlank
         String username,
 
