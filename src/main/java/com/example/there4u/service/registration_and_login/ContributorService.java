@@ -1,5 +1,8 @@
 package com.example.there4u.service.registration_and_login;
 
+import com.example.there4u.dto.Contributor.ContributorDto;
+import com.example.there4u.dto.Contributor.ContributorEditProfileRequest;
+import com.example.there4u.dto.Contributor.ContributorRegisterRequest;
 import com.example.there4u.model.user.Contributor;
 import com.example.there4u.repository.ContributorRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,59 +22,61 @@ public class ContributorService {
         log.info("Contributor registered successfully, id: {}", contributor.getId());
     }
 
-    public void editContributor(Contributor contributor, String target, String newValue) {
+    public ContributorDto createContributor(ContributorRegisterRequest registerRequest) {
+        Contributor contributor = new Contributor(
+                registerRequest.username(),
+                registerRequest.name(),
+                registerRequest.email(),
+                registerRequest.password(),
+                registerRequest.phone(),
+                registerRequest.address(),
+                registerRequest.typeOfUser(),
+                registerRequest.description()
+        );
+
+        registerContributor(contributor);
+        return ContributorDto.fromEntity(contributor);
+    }
+
+    public ContributorDto updateContributor(long id, ContributorEditProfileRequest contributorRequest) {
+        Contributor contributor = contributorRepository.findContributorById(id);
+
         if (contributor == null) {
-            log.error("Attempted to edit NULL contributor");
+            log.error("Attempted to edit NULL Contributor");
             throw new IllegalArgumentException("Contributor cannot be null");
         }
 
-        String action = "";
+        if (contributorRequest.username() != null) {
+            contributor.setUsername(contributorRequest.username());
+        }
 
-        switch (target) {
-            case "username": {
-                contributor.setUsername(newValue);
-                action = "username";
-                break;
-            }
+        if (contributorRequest.name() != null) {
+            contributor.setName(contributorRequest.name());
+        }
 
-            case "name": {
-                contributor.setName(newValue);
-                action = "name";
-                break;
-            }
+        if (contributorRequest.password() != null) {
+            contributor.setPassword(contributorRequest.password());
+        }
 
-            case "password": {
-                contributor.setPassword(newValue);
-                action = "password";
-                break;
-            }
+        if (contributorRequest.phoneNumber() != null) {
+            contributor.setPhone(contributorRequest.phoneNumber());
+        }
 
-            case "phone number": {
-                contributor.setPhone(newValue);
-                action = "phone number";
-                break;
-            }
+        if (contributorRequest.address() != null) {
+            contributor.setAddress(contributorRequest.address());
+        }
 
-            case "address": {
-                contributor.setAddress(newValue);
-                action = "address";
-                break;
-            }
+        if (contributorRequest.typeOfUser() != null) {
+            contributor.setTypeOfUser(contributorRequest.typeOfUser());
+        }
 
-            case "description": {
-                contributor.setDescription(newValue);
-                action = "description";
-                break;
-            }
-
-            default: {
-                log.warn("Attempted to edit unknown target: {}", target);
-                throw new IllegalArgumentException("Invalid target field: " + target);
-            }
+        if (contributorRequest.description() != null) {
+            contributor.setDescription(contributorRequest.description());
         }
 
         contributorRepository.save(contributor);
-        log.info("Contributor edited successfully their {}, id: {}", action, contributor.getId());
+        log.info("Contributor updated successfully, id: {}", contributor.getId());
+        return ContributorDto.fromEntity(contributor);
     }
 
     public void deleteContributor(Contributor contributor) {
@@ -83,5 +88,9 @@ public class ContributorService {
         long id = contributor.getId();
         contributorRepository.delete(contributor);
         log.info("Contributor deleted successfully, id: {}", id);
+    }
+
+    public Contributor findContributorById(Long id) {
+        return contributorRepository.findContributorById(id);
     }
 }

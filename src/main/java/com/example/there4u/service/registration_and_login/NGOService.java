@@ -1,5 +1,8 @@
 package com.example.there4u.service.registration_and_login;
 
+import com.example.there4u.dto.NGOUser.NGODto;
+import com.example.there4u.dto.NGOUser.NGOUserEditProfileRequest;
+import com.example.there4u.dto.NGOUser.NGOUserRegisterRequest;
 import com.example.there4u.model.user.NGOUser;
 import com.example.there4u.repository.NGORepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,59 +22,56 @@ public class NGOService {
         log.info("NGO registered successfully, id: {}", user.getId());
     }
 
-    public void editNGO(NGOUser user, String target, String newValue) {
-        if (user == null) {
-            log.error("Attempted to edit NULL NGO User");
-            throw new IllegalArgumentException("User cannot be null");
+    public NGODto createNGO(NGOUserRegisterRequest registerRequest) {
+        NGOUser ngoUser = new NGOUser(
+                registerRequest.username(),
+                registerRequest.name(),
+                registerRequest.email(),
+                registerRequest.password(),
+                registerRequest.phone(),
+                registerRequest.address(),
+                registerRequest.description()
+        );
+
+        registerNGO(ngoUser);
+        return NGODto.fromEntity(ngoUser);
+    }
+
+    public NGODto updateNGOUser(Long id, NGOUserEditProfileRequest ngoUserRequest) {
+        NGOUser ngoUser = this.ngoRepository.findById(id).orElse(null);
+
+        if (ngoUser == null) {
+            log.error("Attepted to edit NULL NGO User");
+            throw new IllegalArgumentException("NGO User cannot be null");
         }
 
-        String action = "";
-
-        switch (target.toLowerCase()) {
-            case "username": {
-                user.setUsername(newValue);
-                action = "username";
-                break;
-            }
-
-            case "name": {
-                user.setName(newValue);
-                action = "name";
-                break;
-            }
-
-            case "password": {
-                user.setPassword(newValue);
-                action = "password";
-                break;
-            }
-
-            case "phone number": {
-                user.setPhone(newValue);
-                action = "phone number";
-                break;
-            }
-
-            case "address": {
-                user.setAddress(newValue);
-                action = "address";
-                break;
-            }
-
-            case "description": {
-                user.setDescription(newValue);
-                action = "description";
-                break;
-            }
-
-            default: {
-                log.warn("Attempted to edit unknown field: {}", target);
-                throw new IllegalArgumentException(" " + target);
-            }
+        if (ngoUserRequest.username() != null) {
+            ngoUser.setUsername(ngoUserRequest.username());
         }
 
-        ngoRepository.save(user);
-        log.info("NGO User successfully edited their {}, id: {}", action, user.getId());
+        if (ngoUserRequest.name() != null) {
+            ngoUser.setName(ngoUserRequest.name());
+        }
+
+        if (ngoUserRequest.password() != null) {
+            ngoUser.setPassword(ngoUserRequest.password());
+        }
+
+        if (ngoUserRequest.phoneNumber() != null) {
+            ngoUser.setPhone(ngoUserRequest.phoneNumber());
+        }
+
+        if (ngoUserRequest.address() != null) {
+            ngoUser.setAddress(ngoUserRequest.address());
+        }
+
+        if (ngoUserRequest.description() != null) {
+            ngoUser.setDescription(ngoUserRequest.description());
+        }
+
+        ngoRepository.save(ngoUser);
+        log.info("NGO updated successfully, id: {}", id);
+        return NGODto.fromEntity(ngoUser);
     }
 
     public void deleteNGO(NGOUser user) {
@@ -83,5 +83,9 @@ public class NGOService {
         long id = user.getId();
         this.ngoRepository.delete(user);
         log.info("NGO User successfully deleted, id: {}", id);
+    }
+
+    public NGOUser findNGOUserById(long id) {
+        return ngoRepository.findById(id).orElse(null);
     }
 }

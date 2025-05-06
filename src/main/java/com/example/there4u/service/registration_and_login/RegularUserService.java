@@ -1,7 +1,8 @@
 package com.example.there4u.service.registration_and_login;
 
-import com.example.there4u.dto.RegularUserDto;
-import com.example.there4u.dto.RegularUserRequest;
+import com.example.there4u.dto.RegularUser.RegularUserDto;
+import com.example.there4u.dto.RegularUser.RegularUserEditProfileRequest;
+import com.example.there4u.dto.RegularUser.RegularUserRegisterRequest;
 import com.example.there4u.model.user.RegularUser;
 import com.example.there4u.repository.RegularUserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -21,56 +22,7 @@ public class RegularUserService {
         log.info("RegularUser registered successfully, id: {}", user.getId());
     }
 
-    public void editRegularUser(RegularUser user, String target, String newValue) {
-        if (user == null) {
-            log.error("Attempted to edit NULL Regular User");
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
-        String action = "";
-
-        switch (target.toLowerCase()) {
-            case "username": {
-                user.setUsername(newValue);
-                action = "username";
-                break;
-            }
-
-            case "name": {
-                user.setName(newValue);
-                action = "name";
-                break;
-            }
-
-            case "password": {
-                user.setPassword(newValue);
-                action = "password";
-                break;
-            }
-
-            case "phone number": {
-                user.setPhone(newValue);
-                action = "phone number";
-                break;
-            }
-
-            case "address": {
-                user.setAddress(newValue);
-                action = "address";
-                break;
-            }
-
-            default: {
-                log.warn("Attempted to edit unknown field: {}", target);
-                throw new IllegalArgumentException(">! Invalid target field: " + target);
-            }
-        }
-
-        regularUserRepository.save(user);
-        log.info("Regular User successfully edited their {}, id: {}", action, user.getId());
-    }
-
-    public RegularUserDto createRegularUser(RegularUserRequest regularUserRequest) {
+    public RegularUserDto createRegularUser(RegularUserRegisterRequest regularUserRequest) {
         RegularUser regularUser = new RegularUser(
                 regularUserRequest.username(),
                 regularUserRequest.name(),
@@ -80,19 +32,64 @@ public class RegularUserService {
                 regularUserRequest.address(),
                 regularUserRequest.ucn()
         );
+
         registerRegularUser(regularUser);
         return RegularUserDto.fromEntity(regularUser);
     }
 
+    public RegularUserDto updateRegularUser(Long id, RegularUserEditProfileRequest regularUserRequest) {
+        RegularUser regularUser = findRegularUserById(id);
+
+        if (regularUser == null) {
+            log.error("Attempted to edit NULL Regular User");
+            throw new IllegalArgumentException("Regular User cannot be null");
+        }
+
+        if (regularUserRequest.username() != null) {
+            regularUser.setUsername(regularUserRequest.username());
+        }
+
+        if (regularUserRequest.name() != null) {
+            regularUser.setName(regularUserRequest.name());
+        }
+
+        if (regularUserRequest.password() != null) {
+            regularUser.setPassword(regularUserRequest.password());
+        }
+
+        if (regularUserRequest.phoneNumber() != null) {
+            regularUser.setPhone(regularUserRequest.phoneNumber());
+        }
+
+        if (regularUserRequest.address() != null) {
+            regularUser.setAddress(regularUserRequest.address());
+        }
+
+        regularUserRepository.save(regularUser);
+        log.info("RegularUser updated successfully, id: {}", regularUser.getId());
+        return RegularUserDto.fromEntity(regularUser);
+    }
 
     public void deleteRegularUser(RegularUser user) {
         if (user == null) {
             log.error("Attempted to delete NULL User");
-            throw new IllegalArgumentException("User cannot be null");
+            throw new IllegalArgumentException("Regular User cannot be null");
         }
 
         long id = user.getId();
         this.regularUserRepository.delete(user);
         log.info("Regular User successfully deleted, id: {}", id);
+    }
+
+    public RegularUser findRegularUserById(long id) {
+        return regularUserRepository.findById(id).orElse(null);
+    }
+
+    public RegularUser findRegularUserByUsername(String username) {
+        return regularUserRepository.findByUsername(username);
+    }
+
+    public RegularUser findRegularUserByEmail(String email) {
+        return regularUserRepository.findByEmail(email);
     }
 }
