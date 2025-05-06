@@ -74,7 +74,7 @@ public class ContributorTest {
         assertEquals(TypeOfUser.RESTAURANT, validRestaurantContributor.getTypeOfUser());
     }
 
-    // --- Username validation inherited from User ---
+    // --- Username validation inherited fromEntity User ---
 
     @Test
     public void invalidUsername_SpecialSymbols() {
@@ -83,7 +83,7 @@ public class ContributorTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Name validation inherited from User ---
+    // --- Name validation inherited fromEntity User ---
 
     @Test
     public void invalidName_LowercaseStart() {
@@ -92,7 +92,7 @@ public class ContributorTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Email validation inherited from User ---
+    // --- Email validation inherited fromEntity User ---
 
     @Test
     public void invalidEmail_NoAtSymbol() {
@@ -101,7 +101,7 @@ public class ContributorTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Password validation inherited from User ---
+    // --- Password validation inherited fromEntity User ---
 
     @Test
     public void invalidPassword_MissingDigit() {
@@ -110,7 +110,7 @@ public class ContributorTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Phone validation inherited from User ---
+    // --- Phone validation inherited fromEntity User ---
 
     @Test
     public void invalidPhone_WrongPrefix() {

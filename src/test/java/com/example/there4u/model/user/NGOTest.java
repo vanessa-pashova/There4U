@@ -55,7 +55,7 @@ public class NGOTest {
         assertEquals("[No description provided]", ngoUser.getDescription());
     }
 
-    // --- Username validation inherited from User ---
+    // --- Username validation inherited fromEntity User ---
 
     @Test
     public void invalidUsername_WithSpecialSymbols() {
@@ -64,7 +64,7 @@ public class NGOTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Name validation inherited from User ---
+    // --- Name validation inherited fromEntity User ---
 
     @Test
     public void invalidName_NoCapitalLetter() {
@@ -73,7 +73,7 @@ public class NGOTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Email validation inherited from User ---
+    // --- Email validation inherited fromEntity User ---
 
     @Test
     public void invalidEmail_WrongFormat() {
@@ -82,7 +82,7 @@ public class NGOTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Password validation inherited from User ---
+    // --- Password validation inherited fromEntity User ---
 
     @Test
     public void invalidPassword_MissingDigit() {
@@ -91,7 +91,7 @@ public class NGOTest {
         assertFalse(violations.isEmpty());
     }
 
-    // --- Phone validation inherited from User ---
+    // --- Phone validation inherited fromEntity User ---
 
     @Test
     public void invalidPhone_InvalidPrefix() {

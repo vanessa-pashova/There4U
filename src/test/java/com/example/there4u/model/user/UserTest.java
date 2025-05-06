@@ -1,8 +1,8 @@
 package com.example.there4u.model.user;
 
-import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import jakarta.validation.*;
+
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,6 +11,7 @@ public class UserTest {
 
     private static class TestUser extends User {
         public static long idCounter = 0;
+
         @Override
         protected long generateId() {
             return idCounter++;
