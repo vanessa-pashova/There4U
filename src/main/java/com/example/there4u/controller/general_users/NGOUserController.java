@@ -1,4 +1,4 @@
-package com.example.there4u.controller;
+package com.example.there4u.controller.general_users;
 
 import com.example.there4u.dto.NGOUser.NGODto;
 import com.example.there4u.dto.NGOUser.NGOUserEditProfileRequest;
