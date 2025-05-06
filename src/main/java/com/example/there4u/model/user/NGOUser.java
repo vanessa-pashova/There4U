@@ -36,9 +36,7 @@ public class NGOUser extends User {
     public void setDescription(String description) {
         if (description == null || description.isEmpty()) {
             this.description = "[No description provided]";
-        }
-
-        else {
+        } else {
             this.description = description;
         }
     }

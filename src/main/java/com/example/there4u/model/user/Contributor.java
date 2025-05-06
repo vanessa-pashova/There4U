@@ -19,68 +19,32 @@ public class Contributor extends User {
     @Column(name = "description")
     private String description = "[No description added]";
 
-    private boolean isValidTypeOfUser(TypeOfUser typeOfUser, String ContributorID) {
-        int code = Integer.parseInt(ContributorID.substring(0, 2));
-        switch (code) {
-            case 91: {
-                if (typeOfUser == TypeOfUser.CANTEEN) {
-                    return true;
-                }
-
-                break;
-            }
-
-            case 92: {
-                if (typeOfUser == TypeOfUser.GROCERY_STORE) {
-                    return true;
-                }
-
-                break;
-            }
-
-            case 93: {
-                if (typeOfUser == TypeOfUser.RESTAURANT) {
-                    return true;
-                }
-
-                break;
-            }
-        }
-
-        return false;
-    }
-
     @Override
     protected long generateId() {
         switch (this.typeOfUser) {
             case TypeOfUser.CANTEEN:
                 if (canteenId < 92000) {
                     return canteenId++;
-                }
-
-                else {
+                } else {
                     throw new IllegalArgumentException("The database has enough canteen contributors");
                 }
 
             case TypeOfUser.GROCERY_STORE:
                 if (groceryStoreId < 93000) {
                     return groceryStoreId++;
-                }
-
-                else {
+                } else {
                     throw new IllegalArgumentException("The database has enough grocery store contributors");
                 }
 
             case TypeOfUser.RESTAURANT:
                 if (restaurantId < 94000) {
                     return restaurantId++;
-                }
-
-                else {
+                } else {
                     throw new IllegalArgumentException("The database has enough restaurant contributors");
                 }
 
-            default: throw new IllegalArgumentException("Invalid type of contributor");
+            default:
+                throw new IllegalArgumentException("Invalid type of contributor");
         }
     }
 
@@ -102,9 +66,7 @@ public class Contributor extends User {
     public void setDescription(String description) {
         if (description == null || description.isEmpty()) {
             this.description = "[No description provided]";
-        }
-
-        else {
+        } else {
             this.description = description;
         }
     }

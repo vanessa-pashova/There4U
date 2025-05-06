@@ -52,7 +52,7 @@ public abstract class User {
     protected String email;
 
 
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Invalid password. Password must contain at least 8 symbols from which at least one uppercase letter, at least one lowercase letter, and at least one number")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Invalid password. Password must contain at least 8 symbols fromEntity which at least one uppercase letter, at least one lowercase letter, and at least one number")
     @Column(name = "password")
     protected String password;
 
