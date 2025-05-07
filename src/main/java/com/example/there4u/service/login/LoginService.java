@@ -5,9 +5,9 @@ import com.example.there4u.dto.login.LoginResponse;
 import com.example.there4u.model.user.Contributor;
 import com.example.there4u.model.user.NGOUser;
 import com.example.there4u.model.user.RegularUser;
-import com.example.there4u.repository.ContributorRepository;
-import com.example.there4u.repository.NGORepository;
-import com.example.there4u.repository.RegularUserRepository;
+import com.example.there4u.repository.general_users.ContributorRepository;
+import com.example.there4u.repository.general_users.NGORepository;
+import com.example.there4u.repository.general_users.RegularUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

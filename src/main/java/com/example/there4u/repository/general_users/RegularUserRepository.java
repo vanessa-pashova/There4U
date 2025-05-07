@@ -1,4 +1,4 @@
-package com.example.there4u.repository;
+package com.example.there4u.repository.general_users;
 
 import com.example.there4u.model.user.RegularUser;
 import org.springframework.data.jpa.repository.JpaRepository;

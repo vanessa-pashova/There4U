@@ -4,7 +4,7 @@ import com.example.there4u.dto.Contributor.ContributorDto;
 import com.example.there4u.dto.Contributor.ContributorEditProfileRequest;
 import com.example.there4u.dto.Contributor.ContributorRegisterRequest;
 import com.example.there4u.model.user.Contributor;
-import com.example.there4u.repository.ContributorRepository;
+import com.example.there4u.repository.general_users.ContributorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

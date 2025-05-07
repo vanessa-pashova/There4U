@@ -4,7 +4,7 @@ import com.example.there4u.dto.NGOUser.NGODto;
 import com.example.there4u.dto.NGOUser.NGOUserEditProfileRequest;
 import com.example.there4u.dto.NGOUser.NGOUserRegisterRequest;
 import com.example.there4u.model.user.NGOUser;
-import com.example.there4u.repository.NGORepository;
+import com.example.there4u.repository.general_users.NGORepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
