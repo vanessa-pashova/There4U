@@ -93,5 +93,9 @@ public abstract class User {
         this.address = address;
     }
 
+    public void addBadge(Badge badge) {
+        this.badges.add(badge);
+    }
+
     protected abstract long generateId();
 }
