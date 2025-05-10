@@ -10,6 +10,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class PublicationService {
@@ -31,5 +33,9 @@ public class PublicationService {
         Publication savedPublication = publicationRepository.save(publication);
 
         return new PublicationResponseDto(savedPublication);
+    }
+
+    public List<Publication> findByOwnerId(Long ownerId) {
+        return publicationRepository.findByOwnerId(ownerId);
     }
 }

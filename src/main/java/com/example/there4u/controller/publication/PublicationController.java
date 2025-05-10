@@ -2,15 +2,15 @@ package com.example.there4u.controller.publication;
 
 import com.example.there4u.dto.publication.PublicationRequestDto;
 import com.example.there4u.dto.publication.PublicationResponseDto;
+import com.example.there4u.model.publication.Publication;
 import com.example.there4u.service.publication.PublicationService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class PublicationController {
@@ -33,5 +33,16 @@ public class PublicationController {
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/api/users/{ownerId}/publications")
+    public ResponseEntity<?> getPublications(@PathVariable Long ownerId) {
+        List<Publication> publications = publicationService.findByOwnerId(ownerId);
+
+        List<PublicationResponseDto> responses = publications.stream()
+                .map(PublicationResponseDto::new)
+                .toList();
+
+        return ResponseEntity.ok(responses);
     }
 }
