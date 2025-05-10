@@ -1,6 +1,7 @@
 package com.example.there4u.model.user;
 
 import com.example.there4u.model.badge.Badge;
+import com.example.there4u.model.publication.Publication;
 import com.example.there4u.service.geo.OSMBatchAddressValidator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
@@ -75,6 +76,10 @@ public abstract class User {
             inverseJoinColumns = @JoinColumn(name = "badge_id")
     )
     protected Set<Badge> badges = new HashSet<>();
+
+    @OneToMany
+    @JoinColumn(name = "owner_id")
+    protected Set<Publication> publications = new HashSet<>();
 
     public User(String username, String name, String email, String password, String phone, String address) {
         this.username = username;
