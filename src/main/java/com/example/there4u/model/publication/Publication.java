@@ -1,5 +1,6 @@
 package com.example.there4u.model.publication;
 
+import com.example.there4u.dto.publication.PublicationEditRequestDto;
 import com.example.there4u.dto.publication.PublicationRequestDto;
 import com.example.there4u.model.user.User;
 import jakarta.persistence.*;
@@ -39,5 +40,14 @@ public class Publication {
     public Publication(PublicationRequestDto publicationRequestDto) {
         this.title = publicationRequestDto.title();
         this.description = publicationRequestDto.description();
+    }
+
+    public void update(PublicationEditRequestDto publicationEditRequest) {
+        if(publicationEditRequest.title() != null) {
+            this.title = publicationEditRequest.title();
+        }
+        if(publicationEditRequest.description() != null) {
+            this.description = publicationEditRequest.description();
+        }
     }
 }

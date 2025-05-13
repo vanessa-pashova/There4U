@@ -1,5 +1,6 @@
 package com.example.there4u.controller.publication;
 
+import com.example.there4u.dto.publication.PublicationEditRequestDto;
 import com.example.there4u.dto.publication.PublicationRequestDto;
 import com.example.there4u.dto.publication.PublicationResponseDto;
 import com.example.there4u.model.publication.Publication;
@@ -44,5 +45,30 @@ public class PublicationController {
                 .toList();
 
         return ResponseEntity.ok(responses);
+    }
+
+    @PutMapping("/api/users/{ownerId}/publications/{id}")
+    public ResponseEntity<?> updatePublication(@PathVariable Long ownerId, @PathVariable Long id, @RequestBody PublicationEditRequestDto request) {
+        try{
+            PublicationResponseDto response = publicationService.updatePublication(id, ownerId, request);
+            return ResponseEntity.ok(response);
+        }
+        catch(EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        catch(IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/api/users/{ownerId}/publications/{id}")
+    public ResponseEntity<?> deletePublication(@PathVariable Long ownerId, @PathVariable Long id) {
+        try{
+            publicationService.deletePublication(id, ownerId);
+            return ResponseEntity.ok("Publication with id = " + id + " deleted sucessfully.");
+        }
+        catch(IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
