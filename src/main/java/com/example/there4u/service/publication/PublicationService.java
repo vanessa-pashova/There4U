@@ -33,6 +33,8 @@ public class PublicationService {
 
         Publication savedPublication = publicationRepository.save(publication);
 
+        log.info("Publication saved successfully, id: {}", savedPublication);
+
         return new PublicationResponseDto(savedPublication);
     }
 
@@ -50,7 +52,9 @@ public class PublicationService {
 
         publication.update(publicationEditRequest);
         publicationRepository.save(publication);
+
         log.info("Publication updated successfully, id: {}", id);
+
         return new PublicationResponseDto(publication);
     }
 
@@ -60,6 +64,8 @@ public class PublicationService {
             String errorMessage = "Tried to delete a publication that doesn't belong to user with id: "+ ownerId + ". The publication with id = " + id + " belongs to user with id = " + publication.getOwner().getId();
             throw new IllegalArgumentException(errorMessage);
         }
+
+        log.info("Publication deleted successfully, id: {}", id);
 
         publicationRepository.findById(id).ifPresent(publicationRepository::delete);
     }
