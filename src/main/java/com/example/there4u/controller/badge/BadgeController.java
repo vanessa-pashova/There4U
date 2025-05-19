@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/badges")
-public class BadgeControler {
+public class BadgeController {
     private final BadgeService badgeService;
 
-    public BadgeControler(BadgeService badgeService) {
+    public BadgeController(BadgeService badgeService) {
         this.badgeService = badgeService;
     }
 
