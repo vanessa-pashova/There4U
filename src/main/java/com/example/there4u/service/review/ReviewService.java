@@ -25,6 +25,11 @@ public class ReviewService {
     }
 
     public ReviewDto createReview(ReviewCreateRequest reviewCreateRequest) {
+        if (reviewCreateRequest.comment() == null && reviewCreateRequest.rating() == null) {
+            log.warn("Review not created: both comment and rating are null.");
+            return null;
+        }
+
         User user = userRepository.findById(reviewCreateRequest.userDto().id())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -40,6 +45,7 @@ public class ReviewService {
 
         review.setUser(user);
         Review saved = reviewRepository.save(review);
+        log.info("Review with id {} was created", saved.getId());
 
         return ReviewDto.fromEntity(saved);
     }
@@ -66,7 +72,6 @@ public class ReviewService {
         log.info("Review updated with id: {}", id);
         return ReviewDto.fromEntity(updated);
     }
-
 
     public void deleteReview(Long id) {
         Review review = reviewRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Review not found"));
