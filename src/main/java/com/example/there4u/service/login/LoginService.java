@@ -12,6 +12,7 @@ import com.example.there4u.repository.general_users.RegularUserRepository;
 import com.example.there4u.repository.general_users.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class LoginService {
     private final RegularUserRepository regularUserRepository;
     private final NGORepository ngoRepository;
     private final ContributorRepository contributorRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Extracts the password from the user object based on its actual type.
@@ -107,11 +109,12 @@ public class LoginService {
      */
     public LoginService(UserRepository userRepository, RegularUserRepository regularUserRepository,
                         NGORepository ngoRepository,
-                        ContributorRepository contributorRepository) {
+                        ContributorRepository contributorRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.regularUserRepository = regularUserRepository;
         this.ngoRepository = ngoRepository;
         this.contributorRepository = contributorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -154,6 +157,7 @@ public class LoginService {
         User user;
         String username = loginRequest.username();
         String email = loginRequest.email();
+        String hashedPassword = passwordEncoder.encode(loginRequest.password());
         if(username != null) {
             user = userRepository.findByUsername(username);
         }
@@ -164,7 +168,7 @@ public class LoginService {
             log.warn("User with email '{}' or username '{}' not found", email, username);
             throw new EntityNotFoundException("Wrong email/username.");
         }
-        if(user.getPassword().equals(loginRequest.password())) {
+        if (passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
             return user;
         }
         log.warn("User with email '{}' or username '{}' does not match password: {}", email, username, loginRequest.password());

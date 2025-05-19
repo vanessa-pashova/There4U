@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class RegularUserService {
+    private final UserService userService;
     private final RegularUserRepository regularUserRepository;
 
-    public RegularUserService(RegularUserRepository regularUserRepository) {
+    public RegularUserService(UserService userService ,RegularUserRepository regularUserRepository) {
+        this.userService = userService;
         this.regularUserRepository = regularUserRepository;
     }
 
@@ -32,6 +34,8 @@ public class RegularUserService {
                 regularUserRequest.address(),
                 regularUserRequest.ucn()
         );
+
+        userService.encodePassword(regularUser);
 
         registerRegularUser(regularUser);
         return RegularUserDto.fromEntity(regularUser);
@@ -64,6 +68,8 @@ public class RegularUserService {
         if (regularUserRequest.address() != null) {
             regularUser.setAddress(regularUserRequest.address());
         }
+
+        userService.encodePassword(regularUser);
 
         regularUserRepository.save(regularUser);
         log.info("RegularUser updated successfully, id: {}", regularUser.getId());
