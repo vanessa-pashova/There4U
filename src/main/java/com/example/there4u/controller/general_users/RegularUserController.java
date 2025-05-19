@@ -20,14 +20,14 @@ public class RegularUserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegularUser> getRegularUser(@PathVariable Long id) {
+    public ResponseEntity<RegularUserDto> getRegularUser(@PathVariable Long id) {
         RegularUser user = regularUserService.findRegularUserById(id);
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(new RegularUserDto(user), HttpStatus.OK);
     }
 
     @GetMapping("by-username")

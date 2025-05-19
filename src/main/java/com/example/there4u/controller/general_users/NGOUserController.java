@@ -20,14 +20,14 @@ public class NGOUserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NGOUser> getNGOUser(@PathVariable Long id) {
+    public ResponseEntity<NGODto> getNGOUser(@PathVariable Long id) {
         NGOUser user = ngoService.findNGOUserById(id);
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(new NGODto(user), HttpStatus.OK);
     }
 
     @PostMapping
