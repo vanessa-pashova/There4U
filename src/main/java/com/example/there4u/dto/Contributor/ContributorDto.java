@@ -12,6 +12,9 @@ public record ContributorDto(
         String typeOfUser,
         String description
 ) {
+    public ContributorDto(Contributor user) {
+        this(user.getId(), user.getUsername(), user.getName(), user.getAddress(), user.getPhone(), user.getEmail(), user.getTypeOfUser().toString(), user.getDescription());
+    }
     // Optional: static factory method for mapping fromEntity entity
     public static ContributorDto fromEntity(Contributor item) {
         return new ContributorDto(

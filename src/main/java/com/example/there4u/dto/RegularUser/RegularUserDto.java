@@ -11,6 +11,9 @@ public record RegularUserDto(
         String email,
         String ucn
 ) {
+    public RegularUserDto(RegularUser user) {
+        this(user.getId(), user.getUsername(), user.getName(), user.getAddress(), user.getPhone(), user.getEmail(), user.getUCN());
+    }
     // Optional: static factory method for mapping fromEntity entity
     public static RegularUserDto fromEntity(RegularUser item) {
         return new RegularUserDto(
