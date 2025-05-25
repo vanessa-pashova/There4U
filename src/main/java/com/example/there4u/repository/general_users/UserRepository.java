@@ -4,5 +4,7 @@ import com.example.there4u.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findById(long id);
+    public User findByUsername(String username);
+    public User findByEmail(String email);
+    public User findById(long id);
 }

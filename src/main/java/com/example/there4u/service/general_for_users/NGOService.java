@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class NGOService {
+    private final UserService userService;
     private final NGORepository ngoRepository;
 
-    public NGOService(NGORepository ngoRepository) {
+    public NGOService(UserService userService, NGORepository ngoRepository) {
+        this.userService = userService;
         this.ngoRepository = ngoRepository;
     }
 
@@ -32,6 +34,8 @@ public class NGOService {
                 registerRequest.address(),
                 registerRequest.description()
         );
+
+        userService.encodePassword(ngoUser);
 
         registerNGO(ngoUser);
         return NGODto.fromEntity(ngoUser);
@@ -68,6 +72,8 @@ public class NGOService {
         if (ngoUserRequest.description() != null) {
             ngoUser.setDescription(ngoUserRequest.description());
         }
+
+        userService.encodePassword(ngoUser);
 
         ngoRepository.save(ngoUser);
         log.info("NGO updated successfully, id: {}", id);

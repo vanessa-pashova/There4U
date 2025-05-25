@@ -20,14 +20,14 @@ public class ContributorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Contributor> getContributor(@PathVariable Long id) {
+    public ResponseEntity<ContributorDto> getContributor(@PathVariable Long id) {
         Contributor contributor = contributorService.findContributorById(id);
 
         if (contributor == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(contributor, HttpStatus.OK);
+        return new ResponseEntity<>(new ContributorDto(contributor), HttpStatus.OK);
     }
 
     @PostMapping

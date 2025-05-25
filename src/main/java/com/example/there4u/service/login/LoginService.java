@@ -5,10 +5,14 @@ import com.example.there4u.dto.login.LoginResponse;
 import com.example.there4u.model.user.Contributor;
 import com.example.there4u.model.user.NGOUser;
 import com.example.there4u.model.user.RegularUser;
+import com.example.there4u.model.user.User;
 import com.example.there4u.repository.general_users.ContributorRepository;
 import com.example.there4u.repository.general_users.NGORepository;
 import com.example.there4u.repository.general_users.RegularUserRepository;
+import com.example.there4u.repository.general_users.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,9 +23,11 @@ import java.util.function.Supplier;
 public class LoginService {
 
     // Repositories for each type of user
+    private final UserRepository userRepository;
     private final RegularUserRepository regularUserRepository;
     private final NGORepository ngoRepository;
     private final ContributorRepository contributorRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Extracts the password from the user object based on its actual type.
@@ -69,7 +75,7 @@ public class LoginService {
      * @param userType string label for user type (for logging)
      * @return Optional containing LoginResponse on success, or empty if user not found
      */
-    private <T> Optional<LoginResponse> tryLogin(Supplier<T> findByUsername,
+    /*private <T> Optional<LoginResponse> tryLogin(Supplier<T> findByUsername,
                                                  Supplier<T> findByEmail,
                                                  LoginRequest loginRequest,
                                                  String userType) {
@@ -96,17 +102,19 @@ public class LoginService {
         // Success
         log.info("{} {} logged in successfully", userType, username);
         return Optional.of(new LoginResponse(userType, id, username));
-    }
+    }*/
 
     /**
      * Constructor with all user repositories injected.
      */
-    public LoginService(RegularUserRepository regularUserRepository,
+    public LoginService(UserRepository userRepository, RegularUserRepository regularUserRepository,
                         NGORepository ngoRepository,
-                        ContributorRepository contributorRepository) {
+                        ContributorRepository contributorRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.regularUserRepository = regularUserRepository;
         this.ngoRepository = ngoRepository;
         this.contributorRepository = contributorRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -118,7 +126,7 @@ public class LoginService {
      * @return LoginResponse on success
      * @throws IllegalArgumentException if a user is not found or password is incorrect
      */
-    public LoginResponse login(LoginRequest loginRequest) {
+    /*public LoginResponse login(LoginRequest loginRequest) {
         return tryLogin(
                 () -> regularUserRepository.findByUsername(loginRequest.username()),
                 () -> regularUserRepository.findByEmail(loginRequest.email()),
@@ -143,5 +151,27 @@ public class LoginService {
                         })
                 )
         );
+    }*/
+
+    public User authenticate(LoginRequest loginRequest) {
+        User user;
+        String username = loginRequest.username();
+        String email = loginRequest.email();
+        String hashedPassword = passwordEncoder.encode(loginRequest.password());
+        if(username != null) {
+            user = userRepository.findByUsername(username);
+        }
+        else {
+            user = userRepository.findByEmail(email);
+        }
+        if(user == null) {
+            log.warn("User with email '{}' or username '{}' not found", email, username);
+            throw new EntityNotFoundException("Wrong email/username.");
+        }
+        if (passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
+            return user;
+        }
+        log.warn("User with email '{}' or username '{}' does not match password: {}", email, username, loginRequest.password());
+        throw new EntityNotFoundException("Wrong email/username or password.");
     }
 }

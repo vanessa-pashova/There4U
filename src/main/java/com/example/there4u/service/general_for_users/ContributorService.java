@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class ContributorService {
+    private final UserService userService;
     private final ContributorRepository contributorRepository;
 
-    public ContributorService(ContributorRepository contributorRepository) {
+    public ContributorService(UserService userService, ContributorRepository contributorRepository) {
+        this.userService = userService;
         this.contributorRepository = contributorRepository;
     }
 
@@ -33,6 +35,8 @@ public class ContributorService {
                 registerRequest.typeOfUser(),
                 registerRequest.description()
         );
+
+        userService.encodePassword(contributor);
 
         registerContributor(contributor);
         return ContributorDto.fromEntity(contributor);
@@ -73,6 +77,8 @@ public class ContributorService {
         if (contributorRequest.description() != null) {
             contributor.setDescription(contributorRequest.description());
         }
+
+        userService.encodePassword(contributor);
 
         contributorRepository.save(contributor);
         log.info("Contributor updated successfully, id: {}", contributor.getId());

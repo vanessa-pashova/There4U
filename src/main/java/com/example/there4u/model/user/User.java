@@ -8,8 +8,12 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,7 +36,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user_table")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class User {
+public abstract class User implements UserDetails {
     @Id
     @Column(name = "id")
     protected long id;
@@ -100,6 +104,26 @@ public abstract class User {
 
     public void addBadge(Badge badge) {
         this.badges.add(badge);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
     protected abstract long generateId();
