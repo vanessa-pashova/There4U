@@ -3,6 +3,7 @@ package com.example.there4u.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,10 +35,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**",
-                                "/api/contributor-users",
-                                "/api/ngo-users",
-                                "/api/regular-users").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/contributor-users/**").permitAll()
+                        .requestMatchers("/api/ngo-users/**").permitAll()
+                        .requestMatchers("/api/regular-users/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
