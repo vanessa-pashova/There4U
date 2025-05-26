@@ -39,6 +39,8 @@ public class ContributorService {
         userService.encodePassword(contributor);
 
         registerContributor(contributor);
+
+        userService.initiateEmailVerification(contributor);
         return ContributorDto.fromEntity(contributor);
     }
 

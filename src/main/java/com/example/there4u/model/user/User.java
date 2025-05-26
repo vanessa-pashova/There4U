@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -56,7 +57,6 @@ public abstract class User implements UserDetails {
     @Column(name = "email")
     protected String email;
 
-
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$", message = "!> Invalid password. Password must contain at least 8 symbols fromEntity which at least one uppercase letter, at least one lowercase letter, and at least one number")
     @Column(name = "password")
     protected String password;
@@ -84,6 +84,15 @@ public abstract class User implements UserDetails {
     @OneToMany
     @JoinColumn(name = "owner_id")
     protected Set<Publication> publications = new HashSet<>();
+
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    @Column(name = "verification_expiration")
+    private LocalDateTime verificationExpiration;
+
+    @Column(nullable = false)
+    private boolean enabled;
 
     public User(String username, String name, String email, String password, String phone, String address) {
         this.username = username;
@@ -124,6 +133,11 @@ public abstract class User implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 
     protected abstract long generateId();

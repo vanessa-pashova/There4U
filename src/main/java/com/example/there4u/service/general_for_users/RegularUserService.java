@@ -38,6 +38,8 @@ public class RegularUserService {
         userService.encodePassword(regularUser);
 
         registerRegularUser(regularUser);
+
+        userService.initiateEmailVerification(regularUser);
         return RegularUserDto.fromEntity(regularUser);
     }
 

@@ -38,6 +38,8 @@ public class NGOService {
         userService.encodePassword(ngoUser);
 
         registerNGO(ngoUser);
+
+        userService.initiateEmailVerification(ngoUser);
         return NGODto.fromEntity(ngoUser);
     }
 
